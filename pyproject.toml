@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "atproto"
 version = "0.0.0" # placeholder. Dynamic version from Git Tag
-description = "The AT Protocol SDK"
+description = "The AT Protocol SDK for FeSNS"
 authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
 license = "MIT"
 repository = "https://github.com/MarshalX/atproto"

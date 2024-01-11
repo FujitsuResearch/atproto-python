@@ -39,6 +39,7 @@ class PostView(base.ModelBase):
     like_count: t.Optional[int] = None  #: Like count.
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
+    stamp_count: t.Optional[int] = None  #: Stamp count.
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
@@ -188,6 +189,7 @@ class GeneratorView(base.ModelBase):
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
+    stamp_count: t.Optional[int] = Field(default=None, ge=0)  #: Stamp count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(
