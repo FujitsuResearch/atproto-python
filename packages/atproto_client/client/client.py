@@ -218,7 +218,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         ] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
-    ) -> models.AppFujitsuChannelAddChannelMember.Response:
+    ) -> models.AppFujitsuChannelCreateRecord.Response:
         """Add a member to channel.
 
         Args:
@@ -226,7 +226,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             channel (_type_): channel name
 
         Returns:
-            models.AppFujitsuChanneladdChannelMember.Response: 
+            models.AppFujitsuChannelCreateChannelRecord.Response: 
         """
 
         if isinstance(text, TextBuilder):
@@ -236,8 +236,8 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         if not langs:
             langs = [DEFAULT_LANGUAGE_CODE1]
 
-        return self.app.fujitsu.channel.create_channel_record(
-            channel=channel,
+        return self.app.fujitsu.channel.create_record(
+            channel_repo=channel,
             record=models.AppBskyFeedPost.Main(
                 created_at=self.get_current_time_iso(),
                 text=text,
