@@ -158,6 +158,131 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         )
         return self.app.bsky.feed.post.create(repo, record)
 
+    def create_channel(
+        self, channel_name: str
+    ) -> models.AppFujitsuChannelCreateChannel.Response:
+        """Create a channel.
+
+        Args:
+            channel_name (str): new channel name
+
+        Returns:
+            models.AppFujitsuChannelCreateChannel.Response: Reference to the created channel record.
+        """
+        
+        return self.app.fujitsu.channel.create_channel(
+            models.AppFujitsuChannelCreateChannel.Data(
+                channel_name=channel_name,
+            )
+        )
+        
+    def add_channel_member(
+        self, user_did: str, channel
+    ) -> models.AppFujitsuChannelAddChannelMember.Response:
+        """Add a member to channel.
+
+        Args:
+            user_did (str): user did
+            channel (_type_): channel name
+
+        Returns:
+            models.AppFujitsuChanneladdChannelMember.Response: 
+        """
+        
+        return self.app.fujitsu.channel.add_channel_member(
+            models.AppFujitsuChannelAddChannelMember.Data(
+                user_did=user_did,
+                channel=channel
+            )
+        )
+    
+    def send_channel_post(
+        self,
+        text: t.Union[str, TextBuilder],
+        channel: str,
+        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        embed: t.Optional[
+            t.Union[
+                'models.AppBskyEmbedImages.Main',
+                'models.AppBskyEmbedExternal.Main',
+                'models.AppBskyEmbedRecord.Main',
+                'models.AppBskyEmbedRecordWithMedia.Main',
+            ]
+        ] = None,
+        langs: t.Optional[t.List[str]] = None,
+        facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+    ) -> models.AppFujitsuChannelAddChannelMember.Response:
+        """Add a member to channel.
+
+        Args:
+            user_did (str): user did
+            channel (_type_): channel name
+
+        Returns:
+            models.AppFujitsuChanneladdChannelMember.Response: 
+        """
+
+        if isinstance(text, TextBuilder):
+            facets = text.build_facets()
+            text = text.build_text()
+
+        if not langs:
+            langs = [DEFAULT_LANGUAGE_CODE1]
+
+        return self.app.fujitsu.channel.create_channel_record(
+            models.AppFujitsuChannelCreateChannelRecord.Data(
+                channel=channel,
+                collection=ids.AppBskyFeedPost,
+                record=models.AppBskyFeedPost.Main(
+                    created_at=self.get_current_time_iso(),
+                    text=text,
+                    reply=reply_to,
+                    embed=embed,
+                    langs=langs,
+                    facets=facets,
+                ),
+            )
+        )
+        
+    def list_joined_channels(self) -> models.AppFujitsuChannelListJoinedChannels.Response:
+        """List joined channels.
+
+        Returns:
+            list[str]: List of channels
+        """
+        
+        return self.app.fujitsu.channel.list_joined_channel(
+            models.AppFujitsuChannelListJoinedChannels.Params()
+        )
+    
+    def get_channel_posts(
+        self, 
+        channel: str,
+        cursor: t.Optional[str] = None, 
+        limit: t.Optional[int] = None
+        ) -> models.AppFujitsuChannelListChannelRecords.Response:
+        """Get channel feed.
+
+        Args:
+            channel: Channel name. <channel_name>.<did of user the channel created>
+
+        Returns:
+            :obj:`models.AppFujitsuChannelListChannelRecords.Response`: Feed records.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.fujitsu.channel.list_channel_records(
+            models.AppFujitsuChannelListChannelRecords.Params(
+                channel=channel, 
+                collection=ids.AppBskyFeedPost,
+                cursor=cursor, 
+                limit=limit
+            )
+        )
+
+    
     def delete_post(self, post_uri: str) -> bool:
         """Delete post.
 

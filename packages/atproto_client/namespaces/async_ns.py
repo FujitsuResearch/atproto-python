@@ -19,6 +19,7 @@ class AppNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.bsky = BskyNamespace(self._client)
+        self.fujitsu = FujitsuNamespace(self._client)
 
 
 class BskyNamespace(AsyncNamespaceBase):
@@ -30,6 +31,10 @@ class BskyNamespace(AsyncNamespaceBase):
         self.notification = NotificationNamespace(self._client)
         self.unspecced = UnspeccedNamespace(self._client)
 
+class FujitsuNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.channel = AsyncNamespaceBase(self._client)
 
 class ProfileRecord(AsyncRecordBase):
     async def get(
@@ -2896,6 +2901,148 @@ class UnspeccedNamespace(AsyncNamespaceBase):
             'app.bsky.unspecced.searchPostsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedSearchPostsSkeleton.Response)
+
+
+class ChannelNamespace(AsyncNamespaceBase):
+    async def create_channel(
+        self,
+        data: t.Union[models.AppFujitsuChannelCreateChannel.Data, models.AppFujitsuChannelCreateChannel.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelCreateChannel.Response':
+        """Create a new channel.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        data_model = get_or_create(data, models.AppFujitsuChannelCreateChannel.Data)
+        response = self._client.invoke_procedure(
+            'app.fujitsu.channel.createChannel',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelCreateChannel.Response)
+    
+    async def add_channel_member(
+        self,
+        data: t.Union[models.AppFujitsuChannelAddChannelMember.Data, models.AppFujitsuChannelAddChannelMember.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelAddChannelMember.Response':
+        """Create a new channel.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        data_model = get_or_create(data, models.AppFujitsuChannelAddChannelMember.Data)
+        response = self._client.invoke_procedure(
+            'app.fujitsu.channel.addChannelMember',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelAddChannelMember.Response)
+
+    async def create_channel_record(
+        self,
+        data: t.Union[models.AppFujitsuChannelCreateChannelRecord.Data, models.AppFujitsuChannelCreateChannelRecord.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelCreateChannelRecord.Response':
+        """Create a channel record.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        data_model = get_or_create(data, models.AppFujitsuChannelCreateChannelRecord.Data)
+        response = self._client.invoke_procedure(
+            'app.fujitsu.channel.createChannelRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelCreateChannelRecord.Response)
+    
+    async def list_joined_channels(
+        self,
+        params: t.Union[models.AppFujitsuChannelListJoinedChannels.Params, 
+                        models.AppFujitsuChannelListJoinedChannels.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelListJoinedChannels.Response':
+        """List joined channels.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :str:`models.AppFujitsuChannelListJoinedChannels.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        params_model = get_or_create(params, models.AppFujitsuChannelListJoinedChannels.Params)
+        response = self._client.invoke_query(
+            'app.fujitsu.channel.listJoinedChannels',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelListJoinedChannels.Response)    
+
+    async def list_channel_records(
+        self,
+        params: t.Union[models.AppFujitsuChannelListChannelRecords.Params, 
+                        models.AppFujitsuChannelListChannelRecords.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelListChannelRecords.Response':
+        """List records in channel.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :str:`models.AppFujitsuChannelListChannelRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        params_model = get_or_create(params, models.AppFujitsuChannelListChannelRecords.Params)
+        response = self._client.invoke_query(
+            'app.fujitsu.channel.listChannelRecords',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelListChannelRecords.Response)    
 
 
 class ComNamespace(AsyncNamespaceBase):
