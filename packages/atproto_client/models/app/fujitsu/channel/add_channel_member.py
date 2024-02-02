@@ -25,4 +25,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.fujitsu.channel.addChannelMember`."""
 
     channel: str  #: Channel name.
-    added_member: str  #: Did.
+    added_member: str = Field(alias='addedMember')  #: Did.

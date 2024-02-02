@@ -78,16 +78,6 @@ pytest = ">=7.3.1,<7.4.0"
 pytest-asyncio = ">=0.21.0"
 coverage = ">=7.2.7"
 
-[tool.poetry-dynamic-versioning]
-# poetry self add "poetry-dynamic-versioning[plugin]"
-enable = true
-strict = true
-bump = true
-metadata = false
-fix-shallow-repository = true
-vcs = "git"
-style = "pep440"
-
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
 build-backend = "poetry_dynamic_versioning.backend"
