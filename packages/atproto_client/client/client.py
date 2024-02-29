@@ -230,18 +230,15 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             langs = [DEFAULT_LANGUAGE_CODE1]
 
         return self.app.fujitsu.channel.create_channel_record(
-            models.AppFujitsuChannelCreateChannelRecord.Data(
-                channel=channel,
-                collection=ids.AppBskyFeedPost,
-                record=models.AppBskyFeedPost.Main(
-                    created_at=self.get_current_time_iso(),
-                    text=text,
-                    reply=reply_to,
-                    embed=embed,
-                    langs=langs,
-                    facets=facets,
-                ),
-            )
+            channel=channel,
+            record=models.AppBskyFeedPost.Main(
+                created_at=self.get_current_time_iso(),
+                text=text,
+                reply=reply_to,
+                embed=embed,
+                langs=langs,
+                facets=facets,
+            ),
         )
         
     def list_joined_channels(self) -> models.AppFujitsuChannelListJoinedChannels.Response:
@@ -251,9 +248,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             list[str]: List of channels
         """
         
-        return self.app.fujitsu.channel.list_joined_channel(
-            models.AppFujitsuChannelListJoinedChannels.Params()
-        )
+        return self.app.fujitsu.channel.list_joined_channel()
     
     def get_channel_posts(
         self, 
@@ -274,12 +269,9 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         """
 
         return self.app.fujitsu.channel.list_channel_records(
-            models.AppFujitsuChannelListChannelRecords.Params(
-                channel=channel, 
-                collection=ids.AppBskyFeedPost,
-                cursor=cursor, 
-                limit=limit
-            )
+            channel=channel, 
+            cursor=cursor, 
+            limit=limit
         )
 
     

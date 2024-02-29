@@ -2962,7 +2962,11 @@ class ChannelNamespace(NamespaceBase):
 
     def create_channel_record(
         self,
-        data: t.Union[models.AppFujitsuChannelCreateChannelRecord.Data, models.AppFujitsuChannelCreateChannelRecord.DataDict],
+        channel: str,
+        record: 'models.AppBskyFeedPost.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> 'models.AppFujitsuChannelCreateChannelRecord.Response':
         """Create a channel record.
@@ -2978,7 +2982,14 @@ class ChannelNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         
-        data_model = get_or_create(data, models.AppFujitsuChannelCreateChannelRecord.Data)
+        data_model = models.AppFujitsuChannelCreateChannelRecord.Data(
+            channel=channel,
+            collection='app.bsky.feed.post',
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
         response = self._client.invoke_procedure(
             'app.fujitsu.channel.createChannelRecord',
             data=data_model,
@@ -2990,8 +3001,6 @@ class ChannelNamespace(NamespaceBase):
     
     def list_joined_channels(
         self,
-        params: t.Union[models.AppFujitsuChannelListJoinedChannels.Params, 
-                        models.AppFujitsuChannelListJoinedChannels.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppFujitsuChannelListJoinedChannels.Response':
         """List joined channels.
@@ -3007,7 +3016,7 @@ class ChannelNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         
-        params_model = get_or_create(params, models.AppFujitsuChannelListJoinedChannels.Params)
+        params_model = models.AppFujitsuChannelListJoinedChannels.Params()
         response = self._client.invoke_query(
             'app.fujitsu.channel.listJoinedChannels',
             params=params_model,
@@ -3018,8 +3027,9 @@ class ChannelNamespace(NamespaceBase):
 
     def list_channel_records(
         self,
-        params: t.Union[models.AppFujitsuChannelListChannelRecords.Params, 
-                        models.AppFujitsuChannelListChannelRecords.ParamsDict],
+        channel: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
         **kwargs: t.Any,
     ) -> 'models.AppFujitsuChannelListChannelRecords.Response':
         """List records in channel.
@@ -3035,7 +3045,12 @@ class ChannelNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         
-        params_model = get_or_create(params, models.AppFujitsuChannelListChannelRecords.Params)
+        params_model = models.AppFujitsuChannelListChannelRecords.Params(
+            channel=channel,
+            collection='app.bsky.feed.post',
+            cursor=cursor,
+            limit=limit,
+        )
         response = self._client.invoke_query(
             'app.fujitsu.channel.listChannelRecords',
             params=params_model,
