@@ -11,19 +11,21 @@ from atproto_client.models import base
 
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.fujitsu.channel.listChannelRecords`."""
+    """Parameters model for :obj:`app.fujitsu.channel.listRecords`."""
     
-    channel: str  #: Channel name
+    channel_repo: str  #: Channel name
     collection: str  #: The NSID of the record collection.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    reverse: t.Optional[bool] = None  #: Flag to reverse the order of the returned records.
     
 
 class ParamsDict(te.TypedDict):
-    channel: str  #: Channel name.
+    channel_repo: str  #: Channel name.
     collection: str  #: The NSID of the record collection.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    reverse: te.NotRequired[t.Optional[bool]]  #: Flag to reverse the order of the returned records.
 
 
 class Response(base.ResponseModelBase):
@@ -36,12 +38,12 @@ class Response(base.ResponseModelBase):
 
 class Record(base.ModelBase):
 
-    """Definition model for :obj:`app.fujitsu.channel.listChannelRecords`."""
+    """Definition model for :obj:`app.fujitsu.channel.listRecords`."""
 
     cid: str  #: Cid.
     uri: str  #: Uri.
     value: 'UnknownType'  #: Value.
 
-    py_type: te.Literal['app.fujitsu.channel.listChannelRecords#record'] = Field(
-        default='app.fujitsu.channel.listChannelRecords#record', alias='$type', frozen=True
+    py_type: te.Literal['app.fujitsu.channel.listRecords#record'] = Field(
+        default='app.fujitsu.channel.listRecords#record', alias='$type', frozen=True
     )

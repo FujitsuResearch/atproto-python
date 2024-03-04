@@ -106,6 +106,8 @@ class SessionMethodsMixin(TimeMethodsMixin):
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
         self._session: t.Optional[Session] = None
+        
+        self._portal_jwt: t.Optional[str] = None
 
     def _should_refresh_session(self) -> bool:
         if not self._access_jwt_payload or not self._access_jwt_payload.exp:
@@ -116,7 +118,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
 
         return self.get_current_time() > expired_at
 
-    def _set_session_common(self, session: SessionResponse) -> Session:
+    def _set_session_common(self, session: SessionResponse, portal_token: str = None) -> Session:
         self._access_jwt = session.access_jwt
         self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
@@ -130,13 +132,17 @@ class SessionMethodsMixin(TimeMethodsMixin):
             handle=session.handle,
         )
 
+        self._portal_jwt = portal_token
         self._set_auth_headers(session.access_jwt)
 
         return self._session
 
-    @staticmethod
-    def _get_auth_headers(token: str) -> t.Dict[str, str]:
-        return {'Authorization': f'Bearer {token}'}
+    def _get_auth_headers(self, token: str) -> t.Dict[str, str]:
+        if self._portal_jwt is None :
+            return {'Authorization': f'Bearer {token}'}
+        else :
+            return {'Authorization': f'Bearer {self._portal_jwt}',
+                    'X-PDS-Authorization': f'Bearer {token}'}
 
     def _set_auth_headers(self, token: str) -> None:
         self.request.set_additional_headers(self._get_auth_headers(token))

@@ -39,15 +39,21 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
 
         return super()._invoke(invoke_type, **kwargs)
 
-    def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session)
+    def _set_session(self, event: SessionEvent, session: SessionResponse, portal_token: t.Optional[str]=None) -> None:
+        session = self._set_session_common(session, portal_token)
         self._call_on_session_change_callbacks(event, session.copy())
 
-    def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
-        session = self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
-        )
-        self._set_session(SessionEvent.CREATE, session)
+    def _get_and_set_session(self, login: str, password: str, portal_token: t.Optional[str] = None) -> 'models.ComAtprotoServerCreateSession.Response':
+        if portal_token is not None :
+            session = self.com.atproto.server.create_session(
+                models.ComAtprotoServerCreateSession.Data(identifier=login, password=password),
+                headers = {'Authorization': f'Bearer {portal_token}'}
+            )
+        else :
+            session = self.com.atproto.server.create_session(
+                models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
+            )
+        self._set_session(SessionEvent.CREATE, session, portal_token)
         return session
 
     def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
@@ -68,7 +74,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         return import_session
 
     def login(
-        self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
+        self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None, portal_token: t.Optional[str] = None
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
@@ -76,6 +82,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
             session_string: Session string (use :py:attr:`~export_session_string` to obtain it).
+            ad_auth: Token issued at Fujitsu Research Portal
 
         Note:
             Either `session_string` or `login` and `password` should be provided.
@@ -89,7 +96,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         if session_string:
             session = self._import_session_string(session_string)
         elif login and password:
-            session = self._get_and_set_session(login, password)
+            session = self._get_and_set_session(login, password, portal_token)
         else:
             raise ValueError('Either session_string or login and password should be provided.')
 
@@ -274,6 +281,31 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             limit=limit
         )
 
+    def get_channel_records(
+        self, 
+        channel: str,
+        cursor: t.Optional[str] = None, 
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        ) -> models.AppFujitsuChannelListRecords.Response:
+        """Get channel feed.
+
+        Args:
+            channel: Channel name. <channel_name>.<did of user the channel created>
+
+        Returns:
+            :obj:`models.AppFujitsuChannelListChannelRecords.Response`: Feed records.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.fujitsu.channel.list_records(
+            channel=channel, 
+            cursor=cursor, 
+            limit=limit,
+            reverse=reverse,
+        )
     
     def delete_post(self, post_uri: str) -> bool:
         """Delete post.

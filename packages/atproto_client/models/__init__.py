@@ -67,11 +67,14 @@ from atproto_client.models.app.bsky.unspecced import (
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
+from atproto_client.models.app.fujitsu.channel import defs as AppFujitsuChannelDefs
 from atproto_client.models.app.fujitsu.channel import create_channel as AppFujitsuChannelCreateChannel
 from atproto_client.models.app.fujitsu.channel import add_channel_member as AppFujitsuChannelAddChannelMember
 from atproto_client.models.app.fujitsu.channel import create_channel_record as AppFujitsuChannelCreateChannelRecord
+from atproto_client.models.app.fujitsu.channel import list_channel_info as AppFujitsuChannelListChannelInfo
 from atproto_client.models.app.fujitsu.channel import list_joined_channels as AppFujitsuChannelListJoinedChannels
 from atproto_client.models.app.fujitsu.channel import list_channel_records as AppFujitsuChannelListChannelRecords
+from atproto_client.models.app.fujitsu.channel import list_records as AppFujitsuChannelListRecords
 from atproto_client.models.com.atproto.admin import (
     create_communication_template as ComAtprotoAdminCreateCommunicationTemplate,
 )
@@ -250,11 +253,14 @@ class _Ids:
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
+    AppFujitsuChannelDefs: str = 'app.fujitsu.channel.defs'
     AppFujitsuChannelCreateChannel: str = 'app.fujitsu.channel.createChannel'
     AppFujitsuChannelAddChannelMember: str = 'app.fujitsu.channel.addChannelMember'
     AppFujitsuChannelCreateChannelRecord: str = 'app.fujitsu.channel.createChannelRecord'
     AppFujitsuChannelListJoinedChannels: str = 'app.fujitsu.channel.listJoinedChannels'
+    AppFujitsuChannelListChannelInfo: str = 'app.fujitsu.channel.listChannelInfo'
     AppFujitsuChannelListChannelRecords: str = 'app.fujitsu.channel.listChannelRecords'
+    AppFujitsuChannelListRecords: str = 'app.fujitsu.channel.listRecords'
     ComAtprotoAdminCreateCommunicationTemplate: str = 'com.atproto.admin.createCommunicationTemplate'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'

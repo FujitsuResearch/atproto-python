@@ -2999,6 +2999,32 @@ class ChannelNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppFujitsuChannelCreateChannelRecord.Response)
     
+    def list_channel_info(
+        self,
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelListChannelInfo.Response':
+        """List channel info.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :str:`models.AppFujitsuChannelListChannelInfo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        params_model = models.AppFujitsuChannelListChannelInfo.Params()
+        response = self._client.invoke_query(
+            'app.fujitsu.channel.listChannelInfo',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelListChannelInfo.Response)
+    
     def list_joined_channels(
         self,
         **kwargs: t.Any,
@@ -3024,6 +3050,42 @@ class ChannelNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppFujitsuChannelListJoinedChannels.Response)    
+
+    def list_records(
+        self,
+        channel: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelListRecords.Response':
+        """List records in channel.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :str:`models.AppFujitsuChannelListChannelRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        params_model = models.AppFujitsuChannelListRecords.Params(
+            channel_repo=channel,
+            collection='app.bsky.feed.post',
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'app.fujitsu.channel.listRecords',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelListRecords.Response)    
 
     def list_channel_records(
         self,
