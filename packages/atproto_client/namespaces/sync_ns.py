@@ -2960,6 +2960,45 @@ class ChannelNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppFujitsuChannelAddChannelMember.Response)
 
+    def create_record(
+        self,
+        channel_repo: str,
+        record: 'models.AppBskyFeedPost.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppFujitsuChannelCreateRecord.Response':
+        """Create a record.
+        
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        
+        data_model = models.AppFujitsuChannelCreateRecord.Data(
+            channel_repo=channel_repo,
+            collection='app.bsky.feed.post',
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = self._client.invoke_procedure(
+            'app.fujitsu.channel.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppFujitsuChannelCreateRecord.Response)
+
     def create_channel_record(
         self,
         channel: str,

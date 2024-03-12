@@ -71,6 +71,7 @@ from atproto_client.models.app.fujitsu.channel import defs as AppFujitsuChannelD
 from atproto_client.models.app.fujitsu.channel import create_channel as AppFujitsuChannelCreateChannel
 from atproto_client.models.app.fujitsu.channel import add_channel_member as AppFujitsuChannelAddChannelMember
 from atproto_client.models.app.fujitsu.channel import create_channel_record as AppFujitsuChannelCreateChannelRecord
+from atproto_client.models.app.fujitsu.channel import create_record as AppFujitsuChannelCreateRecord
 from atproto_client.models.app.fujitsu.channel import list_channel_info as AppFujitsuChannelListChannelInfo
 from atproto_client.models.app.fujitsu.channel import list_joined_channels as AppFujitsuChannelListJoinedChannels
 from atproto_client.models.app.fujitsu.channel import list_channel_records as AppFujitsuChannelListChannelRecords
@@ -257,6 +258,7 @@ class _Ids:
     AppFujitsuChannelCreateChannel: str = 'app.fujitsu.channel.createChannel'
     AppFujitsuChannelAddChannelMember: str = 'app.fujitsu.channel.addChannelMember'
     AppFujitsuChannelCreateChannelRecord: str = 'app.fujitsu.channel.createChannelRecord'
+    AppFujitsuChannelCreateRecord: str = 'app.fujitsu.channel.createRecord'
     AppFujitsuChannelListJoinedChannels: str = 'app.fujitsu.channel.listJoinedChannels'
     AppFujitsuChannelListChannelInfo: str = 'app.fujitsu.channel.listChannelInfo'
     AppFujitsuChannelListChannelRecords: str = 'app.fujitsu.channel.listChannelRecords'
