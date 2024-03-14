@@ -2988,7 +2988,7 @@ class ChannelNamespace(NamespaceBase):
             record=record,
             rkey=rkey,
             swap_commit=swap_commit,
-            validate=validate,
+            validate_=validate,
         )
         response = self._client.invoke_procedure(
             'app.fujitsu.channel.createRecord',

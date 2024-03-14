@@ -16,10 +16,8 @@ class Data(base.DataModelBase):
     collection: str  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record to create.
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The key of the record.
-    swapCommit: t.Optional[str] = Field(
-        default=None, alias='swapCommit'
-    )  #: Compare and swap with the previous commit by CID.
-    validate: t.Optional[bool] = Field(default=True, alias='validate')  #: Flag for validating the record.
+    swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
+    validate_: t.Optional[bool] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data.
     
 
 class DataDict(te.TypedDict):
@@ -28,8 +26,10 @@ class DataDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record to create.
     rkey: te.NotRequired[t.Optional[str]]  #: The key of the record.
-    swapCommit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
-    validate: te.NotRequired[t.Optional[bool]]  #: Flag for validating the record.
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
+    validate: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data.
 
 
 class Response(base.ResponseModelBase):
